@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/todoListFragment">
+
+    <fragment
+        android:id="@+id/gptScheduleFragment"
+        android:name="com.example.dotodo.fragment.ScheduleFragment"
+        android:label="GPT 스케줄링" />
+
+    <fragment
+        android:id="@+id/todoListFragment"
+        android:name="com.example.dotodo.fragment.ToDoListFragment"
+        android:label="할 일 목록" />
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.dotodo.fragment.SettingsFragment"
+        android:label="설정" />
+</navigation>
