@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="#40A7C7E7"/>
+    <corners android:radius="25dp"/>  <!-- radius를 줄여서 더 납작하게 -->
+    <size
+        android:height="32dp"
+        android:width="100dp"/>   <!-- 너비를 늘림 -->
+</shape>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="#40A7C7E7"/> <!-- 하늘색에 투명도 추가 -->
+    <corners android:radius="50dp"/> <!-- 타원형을 위한 큰 radius -->
+</shape>

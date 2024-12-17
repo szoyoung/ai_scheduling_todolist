@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/aiScheduleFragment"
+        android:icon="@drawable/ic_ai_schedule"
+        android:title="ai scheduling"/>
+
+    <item
+        android:id="@+id/todoListFragment"
+        android:icon="@drawable/ic_todolist"
+        android:title="To Do"/>
+
+    <item
+        android:id="@+id/settingsFragment"
+        android:icon="@drawable/ic_settings"
+        android:title="settings"
+        />
+</menu>

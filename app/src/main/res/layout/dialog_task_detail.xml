@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="320dp"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Detail"
+            android:fontFamily="@font/abril_fatface"
+            android:textColor="@color/black"
+            android:textSize="16dp"
+            android:layout_marginBottom="8dp"/>
+
+        <!-- Description 입력 영역 -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            app:shapeAppearanceOverlay="@style/RoundedTextInputLayout"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_description"
+                android:layout_width="match_parent"
+                android:layout_height="128dp"
+                android:fontFamily="@font/abril_fatface"
+                android:gravity="top"
+                android:hint="Enter details"
+                android:inputType="textMultiLine"
+                android:textSize="12dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- 우선순위 설정 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Priority"
+            android:fontFamily="@font/abril_fatface"
+            android:textColor="@color/black"
+            android:textSize="16dp"
+            android:layout_marginBottom="8dp"/>
+
+        <RadioGroup
+            android:id="@+id/priority_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="20dp">
+
+            <RadioButton
+                android:id="@+id/radio_low"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:fontFamily="@font/abril_fatface"
+                android:textColor="@color/secondary"
+                android:text="low"/>
+
+            <RadioButton
+                android:id="@+id/radio_medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:fontFamily="@font/abril_fatface"
+                android:textColor="@color/secondary"
+                android:text="medium"/>
+
+            <RadioButton
+                android:id="@+id/radio_high"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/abril_fatface"
+                android:textSize="12dp"
+                android:textColor="@color/secondary"
+                android:text="high"/>
+        </RadioGroup>
+
+        <!-- 기한 설정 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Deadline"
+            android:textColor="@color/black"
+            android:fontFamily="@font/abril_fatface"
+            android:textSize="16dp"
+            android:layout_marginBottom="8dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="20dp">
+
+            <Button
+                android:id="@+id/btn_set_deadline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Set Deadline"
+                android:fontFamily="@font/abril_fatface"
+                android:textColor="@color/secondary"
+                android:textSize="12dp"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                app:shapeAppearanceOverlay="@style/RoundedTextInputLayout"/>
+
+            <TextView
+                android:id="@+id/text_deadline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/secondary"
+                android:layout_marginStart="12dp"/>
+        </LinearLayout>
+
+
+        <!-- 버튼 영역 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+
+            <TextView
+                android:id="@+id/btn_save"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="8dp"
+                android:text="save"
+                android:textColor="@color/black"
+                android:textAlignment="center"
+                android:fontFamily="@font/abril_fatface"
+                android:textSize="12dp"
+                android:background="@drawable/bg_btn_save"
+                android:paddingVertical="12dp"
+                android:paddingHorizontal="16dp"/>
+
+            <TextView
+                android:id="@+id/btn_cancel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:text="cancel"
+                android:textColor="@color/black"
+                android:textSize="12dp"
+                android:textAlignment="center"
+                android:fontFamily="@font/abril_fatface"
+                android:background="@drawable/bg_btn_cancel"
+                android:paddingVertical="12dp"
+                android:paddingHorizontal="16dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

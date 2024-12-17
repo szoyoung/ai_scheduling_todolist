@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!-- 삭제 버튼 배경 -->
+    <LinearLayout
+        android:id="@+id/delete_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="end"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/btn_delete"
+            android:layout_width="56dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_delete_button"
+            android:src="@drawable/ic_delete"
+            android:contentDescription="Delete task" />
+    </LinearLayout>
+
+    <!-- 메인 컨텐츠 -->
+    <LinearLayout
+        android:id="@+id/foreground_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:padding="16dp">
+
+        <CheckBox
+            android:id="@+id/checkbox_task"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="8dp">
+
+            <TextView
+                android:id="@+id/text_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp" />
+
+            <EditText
+                android:id="@+id/edit_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:textSize="16sp"
+                android:background="@null"
+                android:imeOptions="actionDone"
+                android:inputType="text"
+                android:maxLines="1"/>
+
+            <TextView
+                android:id="@+id/text_deadline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="#757575"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>
