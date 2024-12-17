@@ -3,9 +3,11 @@ package com.example.dotodo.dialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -14,9 +16,12 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import androidx.fragment.app.FragmentActivity;
+
 import com.example.dotodo.R;
 import com.example.dotodo.data.model.Task;
 import com.example.dotodo.viewmodel.TaskViewModel;
+import com.google.android.material.datepicker.MaterialDatePicker;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -104,7 +109,7 @@ public class TaskDetailDialog extends Dialog {
         }
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(
-                context,
+                new ContextThemeWrapper(context, R.style.CustomDatePickerDialog),
                 (view, year, month, dayOfMonth) -> {
                     Calendar newDate = Calendar.getInstance();
                     newDate.set(year, month, dayOfMonth);
@@ -116,8 +121,40 @@ public class TaskDetailDialog extends Dialog {
                 calendar.get(Calendar.DAY_OF_MONTH)
         );
 
+
+        datePickerDialog.setButton(DialogInterface.BUTTON_POSITIVE, "save", datePickerDialog);
+        datePickerDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "cancel", (dialog, which) -> dialog.dismiss());
+
+
+        // 다이얼로그가 표시되기 전에 배경 설정
+        datePickerDialog.setOnShowListener(dialog -> {
+            // 배경 drawable 생성
+            GradientDrawable shape = new GradientDrawable();
+            shape.setShape(GradientDrawable.RECTANGLE);
+            shape.setColor(Color.WHITE);
+            shape.setCornerRadius(80f);
+
+            Window window = datePickerDialog.getWindow();
+            if (window != null) {
+                window.setBackgroundDrawable(shape);
+            }
+
+
+            // 버튼 색상 변경
+            Button positiveButton = datePickerDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+            Button negativeButton = datePickerDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+
+            if (positiveButton != null) {
+                positiveButton.setTextColor(Color.BLACK);
+            }
+            if (negativeButton != null) {
+                negativeButton.setTextColor(Color.BLACK);
+            }
+        });
+
         datePickerDialog.show();
     }
+
 
     private void updateDeadlineText() {
         if (selectedDate != null) {

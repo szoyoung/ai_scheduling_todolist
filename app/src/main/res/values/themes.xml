@@ -7,10 +7,16 @@
         <item name="android:windowFullscreen">true</item>
         <item name="colorPrimary">@color/black</item>
 
-
-
-
     </style>
+
+    <style name="CustomDatePickerDialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowBackground">@android:color/white</item>
+        <item name="colorAccent">#80A7C7E7</item>
+
+
+        <item name="android:fontFamily">@font/abril_fatface</item>
+    </style>
+
 
     <style name="CustomBottomNavigationView" parent="Widget.MaterialComponents.BottomNavigationView">
         <item name="android:minHeight">54dp</item>
