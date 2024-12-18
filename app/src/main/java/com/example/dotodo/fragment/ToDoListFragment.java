@@ -72,8 +72,9 @@ public class ToDoListFragment extends Fragment implements TaskAdapter.OnTaskClic
     private void setupViewModel() {
         taskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
 
-        taskViewModel.getAllTasks().observe(getViewLifecycleOwner(), tasks ->
-                adapter.submitList(tasks));
+        taskViewModel.getAllTasks().observe(getViewLifecycleOwner(), tasks -> {
+            adapter.submitList(tasks);
+        });
 
         taskViewModel.getUpdatedTask().observe(getViewLifecycleOwner(), task -> {
             if (task != null) {
@@ -81,6 +82,7 @@ public class ToDoListFragment extends Fragment implements TaskAdapter.OnTaskClic
             }
         });
     }
+
 
     private void setupTaskInput() {
         editNewTask.setOnEditorActionListener((v, actionId, event) -> {
@@ -100,10 +102,13 @@ public class ToDoListFragment extends Fragment implements TaskAdapter.OnTaskClic
             taskViewModel.insert(task);
             editNewTask.setText("");
 
-            InputMethodManager imm = (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            // 키보드 숨기기
+            InputMethodManager imm = (InputMethodManager) requireContext()
+                    .getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(editNewTask.getWindowToken(), 0);
         }
     }
+
 
     @Override
     public void onTaskClick(Task task) {

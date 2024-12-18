@@ -36,6 +36,7 @@ public class ScheduleViewModel extends AndroidViewModel {
     private final MutableLiveData<String> error = new MutableLiveData<>();
     private final MutableLiveData<Boolean> isSaveButtonVisible = new MutableLiveData<>(false);
     private final ScheduleRepository scheduleRepository;
+    private TaskRepository taskRepository;  // TaskRepository 참조 추가
 
 
     @Override

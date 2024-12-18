@@ -109,15 +109,25 @@ public class TaskAdapter extends ListAdapter<Task, TaskViewHolder> {
 
     public void updateTask(Task updatedTask) {
         List<Task> currentList = new ArrayList<>(getCurrentList());
-        for (int i = 0; i < currentList.size(); i++) {
-            if (currentList.get(i).getId() == updatedTask.getId()) {
-                currentList.set(i, updatedTask);
-                submitList(currentList);
-                notifyItemChanged(i);
-                break;
-            }
+        final int updateIndex = findTaskIndex(updatedTask.getId(), currentList);
+        if (updateIndex != -1) {
+            currentList.set(updateIndex, updatedTask);
+            submitList(currentList, () -> {
+                notifyItemChanged(updateIndex);
+            });
         }
     }
+
+    private int findTaskIndex(int taskId, List<Task> list) {
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getId() == taskId) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+
 
     private static final DiffUtil.ItemCallback<Task> DIFF_CALLBACK = new DiffUtil.ItemCallback<Task>() {
         @Override

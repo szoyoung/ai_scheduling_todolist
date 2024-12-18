@@ -17,6 +17,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.LifecycleOwner;
 
 import com.example.dotodo.R;
 import com.example.dotodo.data.model.Task;
@@ -36,6 +37,7 @@ public class TaskDetailDialog extends Dialog {
     private Button deadlineButton;
     private TextView deadlineText;
     private Context context;
+    private final LifecycleOwner lifecycleOwner;  // 추가
     private Date selectedDate;  // 선택된 날짜 저장
     private TextView saveButton;
     private TextView cancelButton;
@@ -45,6 +47,11 @@ public class TaskDetailDialog extends Dialog {
         this.context = context;
         this.task = task;
         this.viewModel = viewModel;
+        if (context instanceof LifecycleOwner) {
+            this.lifecycleOwner = (LifecycleOwner) context;
+        } else {
+            throw new IllegalArgumentException("Context must be a LifecycleOwner");
+        }
     }
 
     @Override
@@ -185,5 +192,13 @@ public class TaskDetailDialog extends Dialog {
 
         // 데이터베이스 업데이트
         viewModel.update(task);
+
+        // UI 업데이트 확인 후 다이얼로그 닫기
+        viewModel.updatedTask.observe(lifecycleOwner, updatedTask -> {
+            if (updatedTask != null && updatedTask.getId() == task.getId()) {
+                dismiss();
+            }
+        });
+
     }
 }
