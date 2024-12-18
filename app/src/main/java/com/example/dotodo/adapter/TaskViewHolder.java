@@ -30,7 +30,6 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(Task task, TaskAdapter.OnTaskClickListener listener) {
-        // 기존 코드 유지
         titleView.setText(task.getTitle());
         checkBox.setChecked(task.isCompleted());
 
@@ -58,7 +57,7 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
             return false;
         });
 
-        // 제목 클릭 시 수정 모드로 전환 (추가)
+        // 제목 클릭 시 수정 모드로 전환
         titleView.setOnClickListener(v -> {
             titleView.setVisibility(View.GONE);
             editText.setVisibility(View.VISIBLE);
@@ -71,7 +70,7 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
             imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
         });
 
-        // 수정 완료 (Enter 키) 처리 (추가)
+
         editText.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 String newTitle = editText.getText().toString().trim();

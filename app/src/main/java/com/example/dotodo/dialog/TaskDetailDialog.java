@@ -63,11 +63,10 @@ public class TaskDetailDialog extends Dialog {
         // Dialog 창 스타일 설정
         Window window = getWindow();
         if (window != null) {
-            // 코드로 직접 shape drawable 생성
             GradientDrawable shape = new GradientDrawable();
             shape.setShape(GradientDrawable.RECTANGLE);
             shape.setColor(Color.WHITE);
-            shape.setCornerRadius(50f); // radius 크기 조절 가능
+            shape.setCornerRadius(50f); // radius 크기 조절
 
             window.setBackgroundDrawable(shape);
         }

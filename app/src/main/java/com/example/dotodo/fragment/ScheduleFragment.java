@@ -33,9 +33,7 @@ public class ScheduleFragment extends Fragment {
     private ProgressBar progressBar;
     private RecyclerView scheduleList;
     private WeeklyScheduleAdapter adapter;
-    private boolean isTasksLoaded = false;
-    private TaskViewModel taskViewModel;
-    private ScheduleViewModel scheduleViewModel;
+    private boolean isTasksLoaded = false;;
     private ImageButton createButton;
     private MaterialButton saveButton;
 
@@ -77,9 +75,6 @@ public class ScheduleFragment extends Fragment {
 
     private void setupViewModel() {
         viewModel = new ViewModelProvider(this).get(ScheduleViewModel.class);
-//        scheduleViewModel = new ViewModelProvider(requireActivity()).get(ScheduleViewModel.class);
-//        taskViewModel = new ViewModelProvider(requireActivity()).get(TaskViewModel.class);
-
         // Task 데이터 변화 관찰
         viewModel.getTasks().observe(getViewLifecycleOwner(), tasks -> {
             isTasksLoaded = true;  // 데이터 로드 완료

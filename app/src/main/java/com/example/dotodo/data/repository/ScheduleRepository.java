@@ -26,14 +26,6 @@ public class ScheduleRepository {
         return scheduleDao.getCurrentSchedule();
     }
 
-    public LiveData<List<Schedule>> getAllSchedules() {
-        return allSchedules;
-    }
-
-    public LiveData<Schedule> getScheduleById(int id) {
-        return scheduleDao.getScheduleById(id);
-    }
-
     public void insert(Schedule schedule) {
         executorService.execute(() -> scheduleDao.insert(schedule));
     }

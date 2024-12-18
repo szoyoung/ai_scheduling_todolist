@@ -13,121 +13,20 @@ import com.example.dotodo.R;
 import com.example.dotodo.data.model.Task;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class TaskAdapter extends ListAdapter<Task, TaskViewHolder> {
     private OnTaskClickListener listener;
     private RecyclerView recyclerView;
     private ItemTouchHelper itemTouchHelper;
+    private Set<Integer> swipedPositions = new HashSet<>();
 
     public TaskAdapter(OnTaskClickListener listener) {
         super(DIFF_CALLBACK);
         this.listener = listener;
     }
-
-    @Override
-    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-        this.recyclerView = recyclerView;
-        setupSwipeToDelete();
-    }
-
-    private void setupSwipeToDelete() {
-        ItemTouchHelper.SimpleCallback swipeCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-            private float currentDx = 0f;
-            private View currentForeground = null;
-            private View currentDeleteButton = null;
-            private boolean isDeleteButtonVisible = false;
-
-            @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView,
-                                  @NonNull RecyclerView.ViewHolder viewHolder,
-                                  @NonNull RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                // 스와이프 완료 시 아무 동작도 하지 않음 (삭제는 버튼 클릭으로만)
-                // 원래 위치로 아이템을 되돌림
-                notifyItemChanged(viewHolder.getAdapterPosition());
-            }
-
-            @Override
-            public void clearView(@NonNull RecyclerView recyclerView,
-                                  @NonNull RecyclerView.ViewHolder viewHolder) {
-                super.clearView(recyclerView, viewHolder);
-                currentDx = 0f;
-                if (currentForeground != null) {
-                    currentForeground.setTranslationX(0f);
-                }
-            }
-
-            @Override
-            public void onChildDraw(@NonNull Canvas c,
-                                    @NonNull RecyclerView recyclerView,
-                                    @NonNull RecyclerView.ViewHolder viewHolder,
-                                    float dX, float dY,
-                                    int actionState,
-                                    boolean isCurrentlyActive) {
-
-                View foregroundView = viewHolder.itemView.findViewById(R.id.foreground_view);
-                View deleteBackground = viewHolder.itemView.findViewById(R.id.delete_background);
-                View deleteButton = viewHolder.itemView.findViewById(R.id.btn_delete);
-
-                // 현재 뷰 저장
-                currentForeground = foregroundView;
-                currentDeleteButton = deleteButton;
-                currentDx = dX;
-
-                // 삭제 버튼 너비
-                int deleteButtonWidth = deleteButton.getWidth();
-
-                // 스와이프 제한 (삭제 버튼 너비만큼만)
-                float newDx = Math.max(Math.min(dX, 0), -deleteButtonWidth);
-
-                foregroundView.setTranslationX(newDx);
-
-                // 스와이프 정도에 따라 삭제 버튼 표시/숨김
-                if (Math.abs(newDx) >= deleteButtonWidth / 2) {
-                    if (!isDeleteButtonVisible) {
-                        deleteButton.setVisibility(View.VISIBLE);
-                        isDeleteButtonVisible = true;
-                    }
-                } else {
-                    if (isDeleteButtonVisible) {
-                        deleteButton.setVisibility(View.GONE);
-                        isDeleteButtonVisible = false;
-                    }
-                }
-            }
-        };
-
-        itemTouchHelper = new ItemTouchHelper(swipeCallback);
-        itemTouchHelper.attachToRecyclerView(recyclerView);
-    }
-
-    public void updateTask(Task updatedTask) {
-        List<Task> currentList = new ArrayList<>(getCurrentList());
-        final int updateIndex = findTaskIndex(updatedTask.getId(), currentList);
-        if (updateIndex != -1) {
-            currentList.set(updateIndex, updatedTask);
-            submitList(currentList, () -> {
-                notifyItemChanged(updateIndex);
-            });
-        }
-    }
-
-    private int findTaskIndex(int taskId, List<Task> list) {
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getId() == taskId) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-
 
     private static final DiffUtil.ItemCallback<Task> DIFF_CALLBACK = new DiffUtil.ItemCallback<Task>() {
         @Override
@@ -143,6 +42,13 @@ public class TaskAdapter extends ListAdapter<Task, TaskViewHolder> {
         }
     };
 
+    @Override
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        this.recyclerView = recyclerView;
+        setupSwipeToDelete();
+    }
+
     @NonNull
     @Override
     public TaskViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -154,19 +60,118 @@ public class TaskAdapter extends ListAdapter<Task, TaskViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull TaskViewHolder holder, int position) {
         Task task = getItem(position);
-        holder.bind(task, listener);
+        View foregroundView = holder.itemView.findViewById(R.id.foreground_view);
+        View deleteButton = holder.itemView.findViewById(R.id.btn_delete);
 
-        // 삭제 버튼 클릭 리스너 설정
-        holder.itemView.findViewById(R.id.btn_delete).setOnClickListener(v -> {
+        // 스와이프 상태에 따른 뷰 처리
+        if (swipedPositions.contains(position)) {
+            foregroundView.setTranslationX(-holder.itemView.getWidth());
+            deleteButton.setVisibility(View.VISIBLE);
+            // 스와이프 상태에서는 할 일 관련 클릭 리스너를 비활성화
+            holder.bind(task, null);
+        } else {
+            foregroundView.setTranslationX(0f);
+            deleteButton.setVisibility(View.GONE);
+            // 일반 상태에서는 원래의 리스너 활성화
+            holder.bind(task, listener);
+        }
+
+        // 전체 아이템 뷰에 클릭 리스너 설정
+        holder.itemView.setOnClickListener(v -> {
+            if (swipedPositions.contains(position)) {
+                // 스와이프 상태일 때는 원래 상태로 복구
+                swipedPositions.remove(position);
+                notifyItemChanged(position);
+            } else if (listener != null) {
+                // 일반 상태일 때는 task 클릭 이벤트 발생
+                listener.onTaskClick(task);
+            }
+        });
+
+        // 삭제 버튼 클릭 리스너는 항상 유지
+        deleteButton.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onTaskDelete(task);
             }
+            swipedPositions.remove(position);
         });
+    }
+
+    private void setupSwipeToDelete() {
+        ItemTouchHelper.SimpleCallback swipeCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView,
+                                  @NonNull RecyclerView.ViewHolder viewHolder,
+                                  @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getAdapterPosition();
+                swipedPositions.add(position);
+                notifyItemChanged(position);
+            }
+
+            @Override
+            public void onChildDraw(@NonNull Canvas c,
+                                    @NonNull RecyclerView recyclerView,
+                                    @NonNull RecyclerView.ViewHolder viewHolder,
+                                    float dX, float dY,
+                                    int actionState,
+                                    boolean isCurrentlyActive) {
+                View itemView = viewHolder.itemView;
+                View foregroundView = itemView.findViewById(R.id.foreground_view);
+                View deleteButton = itemView.findViewById(R.id.btn_delete);
+
+                int position = viewHolder.getAdapterPosition();
+                int itemWidth = itemView.getWidth();
+
+                if (isCurrentlyActive) {
+                    // 스와이프 중일 때
+                    float newDx = Math.max(dX, -itemWidth);
+                    foregroundView.setTranslationX(newDx);
+                    deleteButton.setTranslationX(itemWidth + newDx);
+                    deleteButton.setVisibility(Math.abs(newDx) >= itemWidth * 0.5 ? View.VISIBLE : View.GONE);
+                } else if (swipedPositions.contains(position)) {
+                    // 스와이프 상태 유지
+                    foregroundView.setTranslationX(-itemWidth);
+                    deleteButton.setTranslationX(0);
+                    deleteButton.setVisibility(View.VISIBLE);
+                } else {
+                    // 원래 상태
+                    foregroundView.setTranslationX(0f);
+                    deleteButton.setVisibility(View.GONE);
+                }
+            }
+        };
+
+        itemTouchHelper = new ItemTouchHelper(swipeCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
+    }
+
+    // 리스트 업데이트 시 스와이프 상태 초기화
+    @Override
+    public void submitList(List<Task> list) {
+        swipedPositions.clear();
+        super.submitList(list);
+    }
+
+    public void updateTask(Task updatedTask) {
+        List<Task> currentList = new ArrayList<>(getCurrentList());
+        for (int i = 0; i < currentList.size(); i++) {
+            if (currentList.get(i).getId() == updatedTask.getId()) {
+                currentList.set(i, updatedTask);
+                submitList(currentList);
+                notifyItemChanged(i);
+                break;
+            }
+        }
     }
 
     public interface OnTaskClickListener {
         void onTaskClick(Task task);
         void onTaskLongClick(Task task);
-        void onTaskDelete(Task task); // 삭제 메서드 추가
+        void onTaskDelete(Task task);
     }
 }

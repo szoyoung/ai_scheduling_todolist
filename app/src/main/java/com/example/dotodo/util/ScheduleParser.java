@@ -23,7 +23,7 @@ public class ScheduleParser {
 
         prompt.append("당신은 개인 일정 관리 전문가입니다. 다음 조건들을 모두 만족하는 최적의 주간 스케줄을 생성해주세요.\n\n");
 
-        // 핵심 제약조건 제시
+        // 핵심 제약조건
         prompt.append("【필수 준수사항】\n");
         prompt.append("1. 모든 Task는 반드시 마감일 전에 완료되어야 합니다.\n");
         prompt.append("2. 우선순위가 높은 Task를 먼저 배치해야 합니다.\n");
